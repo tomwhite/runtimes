@@ -14,7 +14,7 @@ CONDA_DEFAULT_LIST = [
     "mkl=2017.0.3=0"
 ]
 
-PIP_DEFAULT_LIST = ['glob2==0.6', 'boto==2.48.0', 'boto3==1.4.7', 'certifi', 'zarr']
+PIP_DEFAULT_LIST = ['glob2==0.6', 'boto==2.48.0', 'boto3==1.4.7', 'certifi', 'zarr', 'git+https://github.com/tomwhite/numcodecs@lambda']
 PIP_DEFAULT_UPGRADE_LIST = ['cloudpickle==0.4.0', 'enum34==1.1.6']
 
 CONDA_ML_SET = ['scipy', 'pillow', 'cvxopt', 'scikit-learn']
