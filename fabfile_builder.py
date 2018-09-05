@@ -155,8 +155,10 @@ def create_runtime(pythonver,
             run("conda install -q -y {}".format(conda_default_pkg_str))
             for chan, pkg in conda_pkgs_custom_channel:
                 run("conda install -q -y -c {} {}".format(chan, pkg))
+            run("pip install Cython==0.27.2")
             run("pip install {}".format(pip_pkg_str))
             run("pip install --upgrade {}".format(pip_pkg_upgrade_str))
+            run("pip uninstall --yes Cython")
 
 def format_freeze_str(x):
     packages = x.splitlines()
