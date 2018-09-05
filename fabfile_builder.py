@@ -15,11 +15,12 @@ import runtimes
 import yaml
 import os
 
+miniconda_version='4.3.27.1'
 tgt_ami = 'ami-7172b611'
 region = 'us-west-2'
 unique_instance_name = 'pywren_builder'
 
-s3url = "s3://ericmjonas-public/condaruntime.python3.stripped.scipy-cvxpy-sklearn.mkl_avx2.tar.gz"
+s3url = "s3://tom-pywren-runtimes/condaruntime.python3.stripped.scipy-cvxpy-sklearn.mkl_avx2.tar.gz"
 
 
 
@@ -84,21 +85,28 @@ def install_gist():
                 run("sed -i '1s/^/#define M_PI 3.1415926535897\\n /' lear_gist-1.2/gist.c")
                 run("CFLAGS=-std=c99 /tmp/conda/condaruntime/bin/python setup.py build_ext -I /tmp/conda/condaruntime/include/ -L /tmp/conda/condaruntime/lib/")
                 run("CFLAGS=-std=c99 /tmp/conda/condaruntime/bin/python setup.py install")
-            
+
+
+@task
+def install_dev():
+    with cd("/tmp"):
+        sudo("yum install -q -y  git gcc gcc-c++ make")
+
 @task
 def shrink_conda(CONDA_RUNTIME_DIR):
     put("shrinkconda.py")
+    run("sudo pip install glob2")
     run("python shrinkconda.py {}".format(CONDA_RUNTIME_DIR))
 
 @task
 def terminate():
-    ec2 = boto3.resource('ec2', region_name=AWS_REGION)
+    ec2 = boto3.resource('ec2', region_name=region)
 
     insts = []
     for i in ec2.instances.all():
         if i.state['Name'] == 'running':
             d = tags_to_dict(i.tags)
-            if d['Name'] == instance_name:
+            if d['Name'] == unique_instance_name:
                 i.terminate()
                 insts.append(i)
 
@@ -138,11 +146,12 @@ def create_runtime(pythonver,
     run("rm -Rf {}".format(CONDA_INSTALL_DIR))
     run("mkdir -p {}".format(CONDA_BUILD_DIR))
     with cd(CONDA_BUILD_DIR):
-        run("wget https://repo.continuum.io/miniconda/Miniconda{}-latest-Linux-x86_64.sh -O miniconda.sh ".format(python_base_ver))
+        run("wget https://repo.continuum.io/miniconda/Miniconda{}-{}-Linux-x86_64.sh -O miniconda.sh ".format(python_base_ver, miniconda_version))
         
         run("bash miniconda.sh -b -p {}".format(CONDA_INSTALL_DIR))
         with path("{}/bin".format(CONDA_INSTALL_DIR), behavior="prepend"):
-            run("conda install -q -y python={}".format(pythonver))
+            run("conda config --set auto_update_conda false")
+            run("conda install -q -y python=3.6.2".format(pythonver))
             run("conda install -q -y {}".format(conda_default_pkg_str))
             for chan, pkg in conda_pkgs_custom_channel:
                 run("conda install -q -y -c {} {}".format(chan, pkg))

@@ -1,19 +1,23 @@
 import os
 import hashlib
 
+# Pin version numbers to match s3://pywren-public-us-east-1/pywren.runtimes/default_3.6.meta.json
+CONDA_DEFAULT_LIST = [
+    "numpy=1.13.1=py36_0",
+    "numba=0.34.0",
+    "scipy=0.19.1",
+    "pillow=4.2.1=py36_0",
+    "scikit-learn=0.19.0",
+    "tblib=1.3.2",
+    "pyyaml=3.12=py36_0",
+    "six=1.10.0",
+    "future=0.16.0",
+    "numba=0.34.0",
+    "mkl=2017.0.3=0"
+]
 
-CONDA_DEFAULT_LIST = ["tblib", 
-                      "numpy", 
-                      "pytest", 
-                      "Click", 
-                      "numba", 
-                      "boto3", 
-                      "PyYAML", 
-                      'six',
-                      "cython", 'future']
-
-PIP_DEFAULT_LIST = ['glob2', 'boto', 'certifi']
-PIP_DEFAULT_UPGRADE_LIST = ['cloudpickle', 'enum34']
+PIP_DEFAULT_LIST = ['glob2==0.6', 'boto==2.48.0', 'boto3==1.4.7', 'certifi']
+PIP_DEFAULT_UPGRADE_LIST = ['cloudpickle==0.4.0', 'enum34==1.1.6']
 
 CONDA_ML_SET = ['scipy', 'pillow', 'cvxopt', 'scikit-learn']
 PIP_ML_SET = ['cvxpy', 'redis']
@@ -21,27 +25,11 @@ PIP_ML_SET = ['cvxpy', 'redis']
 CONDA_OPT_SET = ['scipy', 'cvxopt', ('mosek', 'mosek')]
 PIP_OPT_SET = ['cvxpy' ]
 
-RUNTIMES = {'minimal' : {'pythonvers' : ["2.7", "3.5", "3.6"],  
-                         'packages' : { 
-                             'conda_install' : CONDA_DEFAULT_LIST, 
-                             'pip_install' : PIP_DEFAULT_LIST, 
-                             'pip_upgrade' : PIP_DEFAULT_UPGRADE_LIST}},
-            'ml' : {'pythonvers' :  ["2.7", "3.5", "3.6"],
-                    'packages' : {
-                        'conda_install' : CONDA_DEFAULT_LIST + CONDA_ML_SET, 
-                        'pip_install' : PIP_DEFAULT_LIST + PIP_ML_SET, 
-                        'pip_upgrade' : PIP_DEFAULT_UPGRADE_LIST }},
-            'default' : {'pythonvers' : ["2.7", "3.5", "3.6"], 
+RUNTIMES = {'default' : {'pythonvers' : ["3.6"],
                          'packages' : {
-                             'conda_install' : CONDA_DEFAULT_LIST + CONDA_ML_SET, 
-                             'pip_install' : PIP_DEFAULT_LIST + PIP_ML_SET, 
-                             'pip_upgrade' : PIP_DEFAULT_UPGRADE_LIST}}, 
-            'opt' : {'pythonvers' : ["2.7"], 
-                         'packages' : {
-                             'conda_install' : CONDA_DEFAULT_LIST + CONDA_OPT_SET, 
-                             'pip_install' : PIP_DEFAULT_LIST + PIP_OPT_SET, 
-                             'pip_upgrade' : PIP_DEFAULT_UPGRADE_LIST }}
-
+                             'conda_install' : CONDA_DEFAULT_LIST,
+                             'pip_install' : PIP_DEFAULT_LIST,
+                             'pip_upgrade' : PIP_DEFAULT_UPGRADE_LIST}}
 }
 
 
@@ -62,7 +50,7 @@ PIP_TEST_STRS = {"glob2" : "__import__('glob2')",
                  "redis" : "__import__('redis')", 
                  "certifi": "__import__('certifi')"}
 
-S3_BUCKET = "s3://ericmjonas-public"
+S3_BUCKET = "s3://tom-pywren-runtimes"
 S3URL_STAGING_BASE = S3_BUCKET + "/pywren.runtime.staging"
 S3URL_BASE = S3_BUCKET + "/pywren.runtime"
 

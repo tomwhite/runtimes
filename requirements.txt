@@ -1,0 +1,5 @@
+awscli
+boto3
+cloudpickle
+fabric<2.0
+pyyaml
