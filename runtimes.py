@@ -6,8 +6,6 @@ CONDA_DEFAULT_LIST = [
     "numpy=1.13.1=py36_0",
     "numba=0.34.0",
     "scipy=0.19.1",
-    "pillow=4.2.1=py36_0",
-    "scikit-learn=0.19.0",
     "tblib=1.3.2",
     "pyyaml=3.12=py36_0",
     "six=1.10.0",
@@ -16,7 +14,7 @@ CONDA_DEFAULT_LIST = [
     "mkl=2017.0.3=0"
 ]
 
-PIP_DEFAULT_LIST = ['glob2==0.6', 'boto==2.48.0', 'boto3==1.4.7', 'certifi']
+PIP_DEFAULT_LIST = ['glob2==0.6', 'boto==2.48.0', 'boto3==1.4.7', 'certifi', 'zarr']
 PIP_DEFAULT_UPGRADE_LIST = ['cloudpickle==0.4.0', 'enum34==1.1.6']
 
 CONDA_ML_SET = ['scipy', 'pillow', 'cvxopt', 'scikit-learn']
